@@ -13,3 +13,8 @@ body {
     display: table-cell;
     vertical-align: middle;
 }
+canvas {
+    border: 1px dotted silver;
+    background-image: url("../Graphics/SpaceCute PNG/background.png");
+    background-size: 100%;
+}
