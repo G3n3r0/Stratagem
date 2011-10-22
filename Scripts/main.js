@@ -14,7 +14,9 @@ window.onload = function() {
         }
     };
     window.characters = [];
-    var size = 40;
+    window.pos_chars = [];
+    //var size = 40;
+    var size = document.getElementById("c").width/8;
     canvas = document.getElementById("c");
     window.stage = new Stage(canvas);
     stage.enableMouseOver(10);
@@ -39,6 +41,7 @@ window.onload = function() {
         this.atk = 1;
         this.name = name;
         this.img = img;
+        this.range = 1;
         this.bit = new Bitmap(img);
         this.bit.scaleX = this.bit.scaleY = (size-2)/img.height;
         this.bit.x = this.x*size+(size-(img.width*this.bit.scaleX))/2;
@@ -56,7 +59,7 @@ window.onload = function() {
                 console.log(tile.isOccupied);
                 tile.mouseEnabled = false;
                 tile.alpha = 0.125;
-                if(Math.abs(tile.y/size-that.y)<=1 && Math.abs(tile.x/size-that.x)<=1) {
+                if(Math.abs(tile.y/size-that.y)<=that.range && Math.abs(tile.x/size-that.x)<=that.range) {
                     tile.alpha = 0.5;
                     tile.mouseEnabled = true;
                     if(tile.isOccupied) {
@@ -87,20 +90,22 @@ window.onload = function() {
         return this;
     }
     
-    function Character(imgSrc, type, atk, health) {
+    function Character(imgSrc, type, atk, health, range) {
         this.imgSrc = imgSrc;
         this.type = type;
         this.atk = atk||1;
         this.health = health||10;
+        this.range = range||1;
+        console.log(this,this.range);
         this.toString = function() {
             return this.type+"("+this.imgSrc+")";
         };
         return this;
     }
-    characters.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy"));
-    characters.push(new Character("Graphics/SpaceCute PNG/star.png","Star"));
-    characters.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet",20));
-    characters.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart"));
+    pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy"));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star"));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet",20,200,1));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart"));
     function Enemy(x,y,img,name) {
         this.x = x;
         this.y = y;
@@ -184,6 +189,8 @@ window.onload = function() {
             p.atk = this.char.atk;
             p.health = this.char.health;
             p.maxHealth = this.char.health;
+            console.log(this.char.range);
+            p.range = this.char.range;
             players.push(p);
         }
         /*var revTiles = tiles.reverse();
@@ -195,6 +202,9 @@ window.onload = function() {
         stage.update();
         Ticker.setFPS(16);
         Ticker.addListener(window);
+        document.getElementById("c").removeAttribute("class");
+        document.getElementById("div1").style.display = "none";
+        document.title = document.title.replace(/\(loading\.\.\.\)/gi,"");
     }
     function drawTiles() {
         //var size = 40;
@@ -236,6 +246,81 @@ window.onload = function() {
             }
         }
     }
+    function charSelect() {
+        document.getElementById("c").removeAttribute("class");
+        document.getElementById("div1").style.display = "none";
+        document.title = document.title.replace(/\(loading\.\.\.\)/gi,"");
+        
+        for(var i=0;i<pos_chars.length;i++) {
+            console.log(i);
+            var char = pos_chars[i];
+            var s = new Image();
+            s.i = i;
+            s.char = char;
+            s.onload = function(e) {
+                console.log(this.i);
+                console.log(this);
+                var b = new Bitmap(this);
+                b.x = 10;
+                b.y = this.i*size/1.5;
+                b.scaleX = b.scaleY = (size-2)/1.5/this.height;
+                b.mouseEnabled = true;
+                var t = this;
+                b.onClick = function(e2) {
+                    if(characters.length<canvas.width/size) {
+                        characters.push(t.char);
+                        charsLeft -= 1;
+                        clT.text = charsLeft.toString();
+                        stage.update();
+                    }
+                    if(characters.length>=canvas.width/size) {
+                        //but.visible = true;
+                        //bu.visible = true;
+                        bu.alpha = 1;
+                        but.alpha = 1;
+                        bu.mouseEnabled = but.mouseEnabled = true;
+                        stage.update();
+                    }
+                    console.log(characters.length,canvas.width/size);
+                };
+                //b.scaleX = b.scaleY = 1/(this.i+1);
+                stage.addChild(b);
+                console.log(b);
+                stage.update();
+            }
+            s.src = char.imgSrc;
+        }
+        var bW = 128;
+        var bH = 64;
+        var g = new Graphics();
+        g.beginFill("green");
+        g.drawRoundRect(0,0,bW,bH,10,10);
+        var bu = new Shape(g);
+        bu.x = canvas.width-bW;
+        bu.y = canvas.height-bH;
+        bu.alpha = 0.5;
+        bu.onClick = function(e) {
+            stage.removeAllChildren();
+            init();
+        };
+        bu.mouseEnabled = false;
+        
+        var but = new Text("\u2714", "64px Arial", "#FFF");
+        but.x = canvas.width-but.getMeasuredWidth()/2-bW/2;
+        but.y = canvas.height-but.getMeasuredLineHeight()/2+bH/2;
+        but.alpha = 0.5;
+        but.onClick = bu.onClick;
+        but.mouseEnabled = false;
+        
+        var charsLeft = canvas.width/size;
+        var clT = new Text(charsLeft.toString(), "128px Arial", "#FFF");
+        clT.x = canvas.width/2-clT.getMeasuredWidth()/2;
+        clT.y = canvas.height/2;
+        
+        stage.addChild(bu);
+        stage.addChild(but);
+        stage.addChild(clT);
+    }
     function init() {
         drawTiles();
         for(var i=0;i<characters.length;i++) {
@@ -254,5 +339,6 @@ window.onload = function() {
         enemImg.onload = enemLoaded;
         enemImg.src = "Graphics/PlanetCute PNG/Character Horn Girl Edited.png";
     }
-    init();
+    //init();
+    charSelect();
 };

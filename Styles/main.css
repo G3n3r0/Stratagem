@@ -13,8 +13,156 @@ body {
     display: table-cell;
     vertical-align: middle;
 }
-canvas {
+canvas, .spinner {
     border: 1px dotted silver;
+    background-color: #678ea8;
     background-image: url("../Graphics/SpaceCute PNG/background.png");
     background-size: 100%;
+}
+.loading {
+    background-size: auto;
+    background-position: center;
+    background-image: url(http://memoryformymac.com/blog/wp-content/uploads/2010/09/spinning_beach_ball.gif);
+    background-repeat: no-repeat;
+    display: none;
+}
+
+
+/* position the bars and balls correctly (rotate them and translate them outward)*/
+.spinner div{
+  -webkit-animation: fade 1s linear infinite;
+  -moz-animation: fade 1s linear infinite;
+  -opacity: 0;
+}
+/*.spinner div.bar1 {
+  -moz-transform:rotate(0deg) translate(0, -40px);
+  -webkit-transform:rotate(0deg) translate(0, -40px);
+  -webkit-animation-delay: 0s;
+}
+.spinner div.bar2 {
+  -moz-transform:rotate(45deg) translate(0, -40px);
+  -webkit-transform:rotate(45deg) translate(0, -40px);
+  -webkit-animation-delay: -0.875s;
+}
+.spinner div.bar3 {
+  -moz-transform:rotate(90deg) translate(0, -40px);
+  -webkit-transform:rotate(90deg) translate(0, -40px);
+  -webkit-animation-delay: -0.75s;
+}
+.spinner div.bar4 {
+  -moz-transform:rotate(135deg) translate(0, -40px);
+  -webkit-transform:rotate(135deg) translate(0, -40px);
+  -webkit-animation-delay: -0.625s;
+}
+.spinner div.bar5 {
+  -moz-transform:rotate(180deg) translate(0, -40px);
+  -webkit-transform:rotate(180deg) translate(0, -40px);
+  -webkit-animation-delay: -0.5s;
+}
+.spinner div.bar6 {
+  -moz-transform:rotate(225deg) translate(0, -40px);
+  -webkit-transform:rotate(225deg) translate(0, -40px);
+  -webkit-animation-delay: -0.375s;
+}
+.spinner div.bar7 {
+  -moz-transform:rotate(270deg) translate(0, -40px);
+  -webkit-transform:rotate(270deg) translate(0, -40px);
+ -webkit-animation-delay: -0.25s;
+}
+.spinner div.bar8 {
+  -moz-transform:rotate(315deg) translate(0, -40px);
+  -webkit-transform:rotate(315deg) translate(0, -40px);
+  -webkit-animation-delay: -0.125s;
+}
+*/
+.spinner div.bar1 {
+  -webkit-animation-delay: 0s;
+  -moz-animation-delay: 0s;
+}
+.spinner div.bar2 {
+  -webkit-animation-delay: -0.875s;
+  -moz-animation-delay: -0.875s;
+}
+.spinner div.bar3 {
+  -webkit-animation-delay: -0.75s;
+  -moz-animation-delay: -0.75s;
+}
+.spinner div.bar4 {
+  -webkit-animation-delay: -0.625s;
+  -moz-animation-delay: -0.625s;
+}
+.spinner div.bar5 {
+  -webkit-animation-delay: -0.5s;
+  -moz-animation-delay: -0.5s;
+}
+.spinner div.bar6 {
+  -webkit-animation-delay: -0.375s;
+  -moz-animation-delay: -0.375s;
+}
+.spinner div.bar7 {
+ -webkit-animation-delay: -0.25s;
+ -moz-animation-delay: -0.25s;
+}
+.spinner div.bar8 {
+  -webkit-animation-delay: -0.125s;
+  -moz-animation-delay: -0.125s;
+}
+/* set up the three bar spinners */
+.spinner {
+    display: inline-block;
+    width: 640px;
+    height: 480px;
+    vertical-align: middle;
+  /*position:relative;
+  width:100px;
+  height:100px;
+  margin:25px;
+  -moz-border-radius:100px;
+  float:left;
+  /*-moz-transform:scale(0.5);
+  -webkit-transform:scale(0.5);*/
+
+  /* not used right now: */
+}
+.spinner div {
+    display: inline-block;
+  width:30px;
+  height:10px;
+  background:#000;
+  vertical-align: middle;
+  /*position:absolute;
+  top:35px;
+  left:45px;*/
+}
+.spinner h2 {
+    font-family: Arial;
+    margin: 0px;
+    padding:0px;
+    border: none;
+    padding-top: 12px;
+}
+
+/* shadows for the first spinner */
+#div1 div {
+  -moz-box-shadow:black 0 0 4px;
+  -webkit-box-shadow:black 0 0 4px
+}
+  /* rounded outer corners for the second */
+#div2 div {
+  -moz-border-radius-topleft:10px;
+  -moz-border-radius-topright:10px;
+  -webkit-border-top-left-radius:10px;
+  -webkit-border-top-right-radius:10px;
+}
+
+/* full rounded corners and partially hidden for the third */
+#div3 div {
+  -moz-border-radius:20px;
+  -webkit-border-radius:20px;
+  border-radius:20px;
+}
+
+ @-webkit-keyframes fade {
+  from {opacity: 1;}
+  to {opacity: 0;}
 }
