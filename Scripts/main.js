@@ -321,6 +321,28 @@ window.onload = function() {
         stage.addChild(but);
         stage.addChild(clT);
     }
+    function titleScreen() {
+        document.getElementById("c").removeAttribute("class");
+        document.getElementById("div1").style.display = "none";
+        document.title = document.title.replace(/\(loading\.\.\.\)/gi,"");
+        var i = new Image();
+        i.onload = function(e) {
+            var b = new Bitmap(this);
+            b.scaleX = b.scaleY = canvas.width/this.width;
+            console.log(b.scaleX);
+            b.x = 0;
+            b.y = 0;
+            b.mouseEnabled = true;
+            b.onClick = function(e2) {
+                stage.removeAllChildren();
+                stage.update();
+                charSelect();
+            };
+            stage.addChild(b);
+            stage.update();
+        };
+        i.src = "Graphics/big_bang_game.png";
+    }
     function init() {
         drawTiles();
         for(var i=0;i<characters.length;i++) {
@@ -340,5 +362,6 @@ window.onload = function() {
         enemImg.src = "Graphics/PlanetCute PNG/Character Horn Girl Edited.png";
     }
     //init();
-    charSelect();
+    //charSelect();
+    titleScreen();
 };
