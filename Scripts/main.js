@@ -106,6 +106,10 @@ window.onload = function() {
     pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star"));
     pos_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet",20,200,1));
     pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart"));
+    pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera"));
+    pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins"));
+    pos_chars.push(new Character("Graphics/doodler.png","Doodler",2));
+    pos_chars.push(new Character("Graphics/Octocat.png","Octocat",3));
     function Enemy(x,y,img,name) {
         this.x = x;
         this.y = y;
@@ -250,19 +254,27 @@ window.onload = function() {
         document.getElementById("c").removeAttribute("class");
         document.getElementById("div1").style.display = "none";
         document.title = document.title.replace(/\(loading\.\.\.\)/gi,"");
-        
-        for(var i=0;i<pos_chars.length;i++) {
-            console.log(i);
-            var char = pos_chars[i];
+        var q = [];
+        for(var m=0;m<pos_chars.length;m+=8) {
+            q.push(pos_chars.slice(m,m+8));
+        }
+        console.log(q);
+        for(var i=0;i<q.length;i++) {
+            for(var j=0;j<q[i].length;j++) {
+            console.log(i,j);
+            //var char = pos_chars[i];
+            var char = q[i][j];
+            console.log(char);
             var s = new Image();
             s.i = i;
+            s.j = j;
             s.char = char;
             s.onload = function(e) {
-                console.log(this.i);
+                //console.log(this.i,this.j);
                 console.log(this);
                 var b = new Bitmap(this);
-                b.x = 10;
-                b.y = this.i*size/1.5;
+                b.x = 10+this.i*size/1.5;
+                b.y = this.j*size/1.5;
                 b.scaleX = b.scaleY = (size-2)/1.5/this.height;
                 b.mouseEnabled = true;
                 var t = this;
@@ -287,8 +299,9 @@ window.onload = function() {
                 stage.addChild(b);
                 console.log(b);
                 stage.update();
-            }
+            };
             s.src = char.imgSrc;
+        }
         }
         var bW = 128;
         var bH = 64;
@@ -339,6 +352,21 @@ window.onload = function() {
                 charSelect();
             };
             stage.addChild(b);
+            
+            var t1 = new Text("Stratagem", "120px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
+            t1.x = canvas.width/2-t1.getMeasuredWidth()/2;
+            t1.y = canvas.height/2-t1.getMeasuredLineHeight()/2;
+            stage.addChild(t1);
+            var t2 = new Text("The game for those of us smarter than Newton.", "48px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
+            t2.lineWidth = canvas.width;
+            t2.textAlign = "center";
+            //t2.x = Math.abs((canvas.width/2-t2.getMeasuredWidth()/2)/4);
+            t2.x = canvas.width/2;
+            //console.log(t2.x);
+            //t2.x = 0;
+            t2.y = canvas.height/2+t2.getMeasuredLineHeight()/4;
+            stage.addChild(t2);
+            
             stage.update();
         };
         i.src = "Graphics/big_bang_game.png";
