@@ -13,6 +13,12 @@ window.onload = function() {
             this.splice(s,1);
         }
     };
+    function pointer(e) {
+        document.getElementById("c").style.cursor = "pointer";
+    }
+    function depointer(e) {
+        document.getElementById("c").style.cursor = "default";
+    }
     window.characters = [];
     window.pos_chars = [];
     //var size = 40;
@@ -72,9 +78,11 @@ window.onload = function() {
         };
         this.bit.onMouseOver = function(e) {
             canvas.title = "["+that.type+that.name+"]\nHealth: "+that.health/that.maxHealth*100+"%\nAttack: "+that.atk;
+            pointer();
         };
         this.bit.onMouseOut = function(e3) {
                 canvas.title = null;
+                depointer();
             };
         this.update = function() {
             this.bit.x = this.x*size+(size-(img.width*this.bit.scaleX))/2;
@@ -90,26 +98,29 @@ window.onload = function() {
         return this;
     }
     
-    function Character(imgSrc, type, atk, health, range) {
+    function Character(imgSrc, type, description, atk, health, range) {
         this.imgSrc = imgSrc;
         this.type = type;
         this.atk = atk||1;
         this.health = health||10;
         this.range = range||1;
+        this.description = description||"";
         console.log(this,this.range);
         this.toString = function() {
             return this.type+"("+this.imgSrc+")";
         };
         return this;
     }
-    pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy"));
-    pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star"));
-    pos_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet",20,200,1));
-    pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart"));
-    pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera"));
-    pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins"));
-    pos_chars.push(new Character("Graphics/doodler.png","Doodler",2));
-    pos_chars.push(new Character("Graphics/Octocat.png","Octocat",3));
+    pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy", "Just a city boy.\nBorn and raised in South Detroit.\nHe took the midnight train, goin' anywhere."));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star","Dancing with the stars"));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet","It's the same size as your mom. Bazinga!",20,200,1));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart","It's telltale."));
+    pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera","In Soviet Russia, TV watch YOU!"));
+    pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins","(845)-803-6670"));
+    pos_chars.push(new Character("Graphics/doodler.png","Doodler","The character from the game that JUMPED the charts.",2));
+    pos_chars.push(new Character("Graphics/Octocat.png","Octocat","Commit the Kraken.",3));
+    pos_chars.push(new Character("Graphics/Crystal_128_penguin.png","Tux","Installing Gentoo can be a TUXing procedure.",4));
+    pos_chars.push(new Character("Graphics/zoidberg.png","Dr. Zoidberg","Looking for a character? Why not Zoidberg?(\\/)_(\u00B0,,,\u00B0)_(\\/)",4));
     function Enemy(x,y,img,name) {
         this.x = x;
         this.y = y;
@@ -121,6 +132,8 @@ window.onload = function() {
         that.health = 8;
         that.maxHealth = 8;
         that.bit.onClick = null;
+        that.bit.onMouseOver = null;
+        that.bit.onMouseOut = null;
         //this.prototype = new Player(x,y,img,name);
         //var that = this;
         that.toString = function() {
@@ -184,6 +197,19 @@ window.onload = function() {
             tiles[j].isOccupied = enems[j];
         }
         console.log(enems[0]);
+    }
+    function calcEuc(x1,y1,x2,y2) {
+        var ret = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+        return ret;
+    }
+    function enemTurn(enemArr, playerArr) {
+        for(var i=0;i<enemArr.length;i++) {
+            var enem = enemArr[i];
+            for(var j=0;j<playerArr.length;j++) {
+                var player = playerArr[i];
+                console.log(calcEuc(player.x,player.y,enem.x,enem.y));
+            }
+        }
     }
     function imgLoaded(e) {
         console.log(e,this);
@@ -261,50 +287,59 @@ window.onload = function() {
         console.log(q);
         for(var i=0;i<q.length;i++) {
             for(var j=0;j<q[i].length;j++) {
-            console.log(i,j);
-            //var char = pos_chars[i];
-            var char = q[i][j];
-            console.log(char);
-            var s = new Image();
-            s.i = i;
-            s.j = j;
-            s.char = char;
-            s.onload = function(e) {
-                //console.log(this.i,this.j);
-                console.log(this);
-                var b = new Bitmap(this);
-                b.x = 10+this.i*size/1.5;
-                b.y = this.j*size/1.5;
-                b.scaleX = b.scaleY = (size-2)/1.5/this.height;
-                b.mouseEnabled = true;
-                var t = this;
-                b.onClick = function(e2) {
-                    if(characters.length<canvas.width/size) {
-                        characters.push(t.char);
-                        charsLeft -= 1;
-                        clT.text = charsLeft.toString();
-                        stage.update();
-                    }
-                    if(characters.length>=canvas.width/size) {
-                        //but.visible = true;
-                        //bu.visible = true;
-                        bu.alpha = 1;
-                        but.alpha = 1;
-                        bu.mouseEnabled = but.mouseEnabled = true;
-                        stage.update();
-                    }
-                    console.log(characters.length,canvas.width/size);
+                console.log(i,j);
+                //var char = pos_chars[i];
+                var char = q[i][j];
+                console.log(char);
+                var s = new Image();
+                s.i = i;
+                s.j = j;
+                s.char = char;
+                s.onload = function(e) {
+                    //console.log(this.i,this.j);
+                    console.log(this);
+                    var b = new Bitmap(this);
+                    b.x = 10+this.i*size/1.5;
+                    b.y = this.j*size/1.5;
+                    b.scaleX = b.scaleY = (size-2)/1.5/this.height;
+                    b.mouseEnabled = true;
+                    var t = this;
+                    b.onClick = function(e2) {
+                        if(characters.length<canvas.width/size) {
+                            characters.push(t.char);
+                            charsLeft -= 1;
+                            clT.text = charsLeft.toString();
+                            stage.update();
+                        }
+                        if(characters.length>=canvas.width/size) {
+                            //but.visible = true;
+                            //bu.visible = true;
+                            bu.alpha = 1;
+                            but.alpha = 1;
+                            bu.mouseEnabled = but.mouseEnabled = true;
+                            stage.update();
+                        }
+                        console.log(characters.length,canvas.width/size);
+                    };
+                    b.onMouseOver = function(e2) {
+                        pointer();
+                        //console.log(this);
+                        canvas.title = this.image.char.type;
+                    };
+                    b.onMouseOut = function(e2) {
+                        canvas.title = null;
+                        depointer();
+                    };
+                    //b.scaleX = b.scaleY = 1/(this.i+1);
+                    stage.addChild(b);
+                    console.log(b);
+                    stage.update();
                 };
-                //b.scaleX = b.scaleY = 1/(this.i+1);
-                stage.addChild(b);
-                console.log(b);
-                stage.update();
-            };
-            s.src = char.imgSrc;
+                s.src = char.imgSrc;
+            }
         }
-        }
-        var bW = 128;
-        var bH = 64;
+        var bW = size/1.5*2;
+        var bH = size/1.5;
         var g = new Graphics();
         g.beginFill("green");
         g.drawRoundRect(0,0,bW,bH,10,10);
@@ -316,17 +351,25 @@ window.onload = function() {
             stage.removeAllChildren();
             init();
         };
+        bu.onMouseOver = pointer;
+        bu.onMouseOut = depointer;
         bu.mouseEnabled = false;
         
-        var but = new Text("\u2714", "64px Arial", "#FFF");
+        var buts = 64*(canvas.width/640);
+        
+        var but = new Text("\u2714", buts+"px Arial", "#FFF");
         but.x = canvas.width-but.getMeasuredWidth()/2-bW/2;
         but.y = canvas.height-but.getMeasuredLineHeight()/2+bH/2;
         but.alpha = 0.5;
         but.onClick = bu.onClick;
+        but.onMouseOver = bu.onMouseOver;
+        but.onMouseOut = bu.onMouseOut;
         but.mouseEnabled = false;
         
+        var charsLefts = 128*(canvas.width/640);
+        
         var charsLeft = canvas.width/size;
-        var clT = new Text(charsLeft.toString(), "128px Arial", "#FFF");
+        var clT = new Text(charsLeft.toString(), charsLefts+"px Arial", "#FFF");
         clT.x = canvas.width/2-clT.getMeasuredWidth()/2;
         clT.y = canvas.height/2;
         
@@ -353,11 +396,14 @@ window.onload = function() {
             };
             stage.addChild(b);
             
-            var t1 = new Text("Stratagem", "120px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
+            var t1s = 120*(canvas.width/640);
+            var t2s = 48*(canvas.width/640);
+            
+            var t1 = new Text("Stratagem", t1s+"px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
             t1.x = canvas.width/2-t1.getMeasuredWidth()/2;
             t1.y = canvas.height/2-t1.getMeasuredLineHeight()/2;
             stage.addChild(t1);
-            var t2 = new Text("The game for those of us smarter than Newton.", "48px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
+            var t2 = new Text("The game for those of us smarter than Newton.", t2s+"px Ubuntu, Helvetica, Arial, sans-serif", "#FFF");
             t2.lineWidth = canvas.width;
             t2.textAlign = "center";
             //t2.x = Math.abs((canvas.width/2-t2.getMeasuredWidth()/2)/4);
@@ -369,7 +415,7 @@ window.onload = function() {
             
             stage.update();
         };
-        i.src = "Graphics/big_bang_game.png";
+        i.src = "Graphics/big_bang_game_sharp.png";
     }
     function init() {
         drawTiles();

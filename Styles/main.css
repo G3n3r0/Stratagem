@@ -26,6 +26,9 @@ canvas, .spinner {
     background-image: url("../Graphics/SpaceCute PNG/background.png");
     background-size: 100%;
 }
+canvas.pointer {
+    cursor: pointer;
+}
 .loading {
     background-size: auto;
     background-position: center;
