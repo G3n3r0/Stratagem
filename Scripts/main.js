@@ -22,7 +22,7 @@ window.onload = function() {
     window.characters = [];
     window.pos_chars = [];
     //var size = 40;
-    var size = document.getElementById("c").width/8;
+    var size = document.getElementById("c").width/16;
     canvas = document.getElementById("c");
     window.stage = new Stage(canvas);
     stage.enableMouseOver(10);
@@ -58,21 +58,21 @@ window.onload = function() {
         var that = this;
         this.bit.onClick = function(e2) {
             window.selectedPlayer = that;
-            console.log("Derp");
+            //console.log("Derp");
             for(var i=0;i<tiles.length;i++) {
                 var tile = tiles[i];
-                console.log(Math.abs(tile.y/size-that.y), Math.abs(tile.x/size-that.x));
-                console.log(tile.isOccupied);
+                //console.log(Math.abs(tile.y/size-that.y), Math.abs(tile.x/size-that.x));
+                //console.log(tile.isOccupied);
                 tile.mouseEnabled = false;
                 tile.alpha = 0.125;
                 if(Math.abs(tile.y/size-that.y)<=that.range && Math.abs(tile.x/size-that.x)<=that.range) {
                     tile.alpha = 0.5;
                     tile.mouseEnabled = true;
-                    if(tile.isOccupied) {
+                    //if(tile.isOccupied) {
                         //alert("Boomz");
                         //tile.isOccupied.bit.mouseEnabled = true;
                         //tile.isOccupied.bit.onClick = tile.onClick;
-                    }
+                    //}
                 }
             }
         };
@@ -105,7 +105,7 @@ window.onload = function() {
         this.health = health||10;
         this.range = range||1;
         this.description = description||"";
-        console.log(this,this.range);
+        //console.log(this,this.range);
         this.toString = function() {
             return this.type+"("+this.imgSrc+")";
         };
@@ -196,30 +196,61 @@ window.onload = function() {
         for(var j in enems) {
             tiles[j].isOccupied = enems[j];
         }
-        console.log(enems[0]);
+        //console.log(enems[0]);
+        //enems[2].y = 3;
+        //enems[2].bit.y = 3*size;
     }
     function calcEuc(x1,y1,x2,y2) {
         var ret = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
         return ret;
     }
     function enemTurn(enemArr, playerArr) {
+        var tempArr = [];
         for(var i=0;i<enemArr.length;i++) {
             var enem = enemArr[i];
+            var tempArr2 = [];
             for(var j=0;j<playerArr.length;j++) {
                 var player = playerArr[i];
-                console.log(calcEuc(player.x,player.y,enem.x,enem.y));
+                tempArr2.push([enem,calcEuc(player.x,player.y,enem.x,enem.y),player]);
             }
+            tempArr.push(tempArr2);
         }
+        var tempArr3 = [];
+        for(var k=0;k<tempArr.length;k++) {
+            tempArr[k].sort(function(a,b) {
+                return (a[1]-b[1]);
+            });
+            tempArr3.push(tempArr[k][0]);
+        }
+        //console.log(tempArr3
+        tempArr3.sort(function(a,b) {
+            return (a[1]-b[1]);
+        });
+        console.log(tempArr3);
+        var final = tempArr3[0];
+        var finalP = final[2];
+        var finalE = final[0];
+        if(finalE.x<finalP.x) {
+            finalE.x += 1;
+        } else if(finalE.x>finalP.x) {
+            finalE.x -= 1;
+        }
+        if(finalE.y<finalP.y) {
+            finalE.y += 1;
+        } else if(finalE.y>finalP.y) {
+            finalE.y -= 1;
+        }
+        finalE.update();
     }
     function imgLoaded(e) {
-        console.log(e,this);
-        console.log(canvas.height,size);
+        //console.log(e,this);
+        //console.log(canvas.height,size);
         for(var i=this.num||0;i<canvas.width/size/characters.length+this.num;i++) {
             var p = new Player(i,canvas.height/size-1,this," "+i.toString());
             p.atk = this.char.atk;
             p.health = this.char.health;
             p.maxHealth = this.char.health;
-            console.log(this.char.range);
+            //console.log(this.char.range);
             p.range = this.char.range;
             players.push(p);
         }
@@ -228,7 +259,7 @@ window.onload = function() {
         for(var j in revPlayers) {
             revTiles[j].isOccupied = revPlayers[j];
         }*/
-        console.log(players[0].toString());
+        //console.log(players[0].toString());
         stage.update();
         Ticker.setFPS(16);
         Ticker.addListener(window);
@@ -251,7 +282,7 @@ window.onload = function() {
                 s.mouseEnabled = false;
                 s.alpha = 0.125;
                 s.onClick = function(e) {
-                    console.log("Derp^2");
+                    //console.log("Derp^2");
                     //console.log(tiles[selectedPlayer.x*selectedPlayer.y-selectedPlayer.x]);
                     for(var k=0;k<tiles.length;k++) {
                         if(k.isOccupied==selectedPlayer) {
@@ -261,7 +292,7 @@ window.onload = function() {
                     window.selectedPlayer.x = this.x/size;
                     window.selectedPlayer.y = this.y/size;
                     s.isOccupied = window.selectedPlayer;
-                    console.log(this,window.selectedPlayer);
+                    //console.log(this,window.selectedPlayer);
                     for(var i=0;i<tiles.length;i++) {
                         if(tiles[i].mouseEnabled) {
                             tiles[i].mouseEnabled = false;
@@ -269,6 +300,7 @@ window.onload = function() {
                         }
                     }
                     //selectedPlayer.update();
+                    enemTurn(enems,players);
                 };
                 stage.addChild(s);
                 tiles.push(s);
@@ -281,23 +313,23 @@ window.onload = function() {
         document.getElementById("div1").style.display = "none";
         document.title = document.title.replace(/\(loading\.\.\.\)/gi,"");
         var q = [];
-        for(var m=0;m<pos_chars.length;m+=8) {
-            q.push(pos_chars.slice(m,m+8));
+        for(var m=0;m<pos_chars.length;m+=canvas.width/size) {
+            q.push(pos_chars.slice(m,m+canvas.width/size));
         }
-        console.log(q);
+        //console.log(q);
         for(var i=0;i<q.length;i++) {
             for(var j=0;j<q[i].length;j++) {
-                console.log(i,j);
+                //console.log(i,j);
                 //var char = pos_chars[i];
                 var char = q[i][j];
-                console.log(char);
+                //console.log(char);
                 var s = new Image();
                 s.i = i;
                 s.j = j;
                 s.char = char;
                 s.onload = function(e) {
                     //console.log(this.i,this.j);
-                    console.log(this);
+                    //console.log(this);
                     var b = new Bitmap(this);
                     b.x = 10+this.i*size/1.5;
                     b.y = this.j*size/1.5;
@@ -319,12 +351,12 @@ window.onload = function() {
                             bu.mouseEnabled = but.mouseEnabled = true;
                             stage.update();
                         }
-                        console.log(characters.length,canvas.width/size);
+                        //console.log(characters.length,canvas.width/size);
                     };
                     b.onMouseOver = function(e2) {
                         pointer();
                         //console.log(this);
-                        canvas.title = this.image.char.type;
+                        canvas.title = this.image.char.type+"\n"+this.image.char.description;
                     };
                     b.onMouseOut = function(e2) {
                         canvas.title = null;
@@ -332,7 +364,7 @@ window.onload = function() {
                     };
                     //b.scaleX = b.scaleY = 1/(this.i+1);
                     stage.addChild(b);
-                    console.log(b);
+                    //console.log(b);
                     stage.update();
                 };
                 s.src = char.imgSrc;
@@ -361,6 +393,7 @@ window.onload = function() {
         but.x = canvas.width-but.getMeasuredWidth()/2-bW/2;
         but.y = canvas.height-but.getMeasuredLineHeight()/2+bH/2;
         but.alpha = 0.5;
+        but.visible = false;
         but.onClick = bu.onClick;
         but.onMouseOver = bu.onMouseOver;
         but.onMouseOut = bu.onMouseOut;
@@ -385,7 +418,7 @@ window.onload = function() {
         i.onload = function(e) {
             var b = new Bitmap(this);
             b.scaleX = b.scaleY = canvas.width/this.width;
-            console.log(b.scaleX);
+            //console.log(b.scaleX);
             b.x = 0;
             b.y = 0;
             b.mouseEnabled = true;
@@ -423,7 +456,7 @@ window.onload = function() {
             window.playerImg = new Image();
             playerImg.char = characters[i];
             playerImg.num = i*(canvas.width/size/characters.length);
-            console.log(playerImg.num);
+            //console.log(playerImg.num);
             playerImg.onload = imgLoaded;
             //playerImg.onload = function(e) {
             //    imgLoaded(e,i);
