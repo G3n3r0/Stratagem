@@ -22,7 +22,7 @@ window.onload = function() {
     window.characters = [];
     window.pos_chars = [];
     //var size = 40;
-    var size = document.getElementById("c").width/16;
+    var size = document.getElementById("c").width/8;
     canvas = document.getElementById("c");
     window.stage = new Stage(canvas);
     stage.enableMouseOver(10);
@@ -121,6 +121,7 @@ window.onload = function() {
     pos_chars.push(new Character("Graphics/Octocat.png","Octocat","Commit the Kraken.",3));
     pos_chars.push(new Character("Graphics/Crystal_128_penguin.png","Tux","Installing Gentoo can be a TUXing procedure.",4));
     pos_chars.push(new Character("Graphics/zoidberg.png","Dr. Zoidberg","Looking for a character? Why not Zoidberg?(\\/)_(\u00B0,,,\u00B0)_(\\/)",4));
+    pos_chars.push(new Character("Graphics/sheldonCooper.png","Sheldor the Conqueror","[Sheldor is AFK]",5));
     function Enemy(x,y,img,name) {
         this.x = x;
         this.y = y;
