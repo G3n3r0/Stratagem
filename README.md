@@ -9,8 +9,8 @@ Elemental Powers
 Various characters have elemental powers. They are either Scientific, Magical, Brute or Neutral. The power increases are shown below, with Neutral having no effect.
 
 <pre>
- ___     _                      _____\    _______    __  __           _    
-/ __| __(_)___ _ _  __ ___     /      \  |      /\  |  \/  |__ _ __ _(_)__  
+ ___     _                      _____\    _______    __  __           _
+/ __| __(_)___ _ _  __ ___     /      \  |      /\  |  \/  |__ _ __ _(_)__
 \__ \/ _| / -_) ' \/ _/ -_)   /_______/  |_____/  \ | |\/| / _` / _` | / _|
 |___/\__|_\___|_||_\__\___|  |   \   /        /   / |_|  |_\__,_\__, |_\__|
                               \   \         \/   /              |___/
@@ -21,7 +21,7 @@ Various characters have elemental powers. They are either Scientific, Magical, B
                                    \   \/   /
                                     \___\__/
                                 ___          _
-                               | _ )_ _ _  _| |_ ___ 
+                               | _ )_ _ _  _| |_ ___
                                | _ \ '_| || |  _/ -_)
                                |___/_|  \_,_|\__\___|
 </pre>
@@ -36,5 +36,9 @@ Author
  / __|__ / \| |__ / _ \/  \ 
 | (_ ||_ \ .` ||_ \   / () |
  \___|___/_|\_|___/_|_\\__/ 
-
+G3n3r0
 </pre>
+
+- [Google Profile](https://profiles.google.com/g3n3r0.g3n3ru5/about)
+- [Stack Overflow](http://stackoverflow.com/users/721868/g3n3r0)
+- [GitHub](https://github.com/G3n3r0)
