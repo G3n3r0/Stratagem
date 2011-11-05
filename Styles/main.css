@@ -34,7 +34,8 @@ canvas, .spinner {
     background-color: #678ea8;
     background-image: url("../Graphics/SpaceCute PNG/background.png");
     background-size: 100%;
-    box-shadow: 0px 0px 10px #FFFFFF;
+    box-shadow: 0 0 10px #FFFFFF;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); 
 }
 canvas.pointer {
     cursor: pointer;
@@ -130,8 +131,8 @@ canvas.pointer {
 /* set up the three bar spinners */
 .spinner {
     display: inline-block;
-    width: 480px;
-    height: 640px;
+    width: 640px;
+    height: 480px;
     vertical-align: middle;
   /*position:relative;
   width:100px;
@@ -143,6 +144,14 @@ canvas.pointer {
   -webkit-transform:scale(0.5);*/
 
   /* not used right now: */
+}
+.spinner.mediu {
+    width: 960px;
+    height: 720px;
+}
+.spinner.large {
+    width: 1280px;
+    height: 960px;
 }
 .spinner div {
     display: inline-block;

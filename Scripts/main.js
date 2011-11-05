@@ -1,6 +1,39 @@
 "\u2328";
 window.onload = function() {
+    window.scrollTo(0, 1);
+    window.onscroll = function(e) {
+        //alert(document.body.scrollTop);
+        if(document.body.scrollTop>=0 && document.body.scrollTop<=25) {
+            if(document.body.scrollTop<=0) {
+                setTimeout(function() {
+                    window.scrollTo(document.body.scrollLeft,1);
+                }, 2000);
+            } else {
+                window.scrollTo(document.body.scrollLeft,1);
+            }
+        }
+    };
+    var sW = window.innerWidth;
+    var sH = window.innerHeight;
+    var spinner = document.getElementsByClassName("spinner")[0];
+    var canvas = document.getElementById("c");
+    if(sW>=1280 && sH>=960) {
+        canvas.width = 1280;
+        canvas.height = 960;
+        spinner.setAttribute("class",spinner.getAttribute("class")+"large");
+    } else if(sW>=960 && sH>=720) {
+        canvas.width = 960;
+        canvas.height = 720;
+        spinner.setAttribute("class",spinner.getAttribute("class")+"mediu");
+        //spinner.addClass("mediu");
+    }
     window.curSymb = "\u264b";
+    window.symbObj = {
+            science: "\u269b",
+            neutral: "\u2696",
+            brute: "\u2692",
+            magic: "\u2618"
+        };
     window.money = 100;
     window.enemsLoaded = false;
     function findIndex(arr,val) {
@@ -85,7 +118,7 @@ window.onload = function() {
             }
         };
         this.bit.onMouseOver = function(e) {
-            canvas.title = "["+that.type+that.name+"]\nHealth: "+that.health/that.maxHealth*100+"%\nAttack: "+that.atk;
+            canvas.title = "["+symbObj[this.image.char.elem]+that.type+that.name+"]\nHealth: "+that.health/that.maxHealth*100+"%\nAttack: "+that.atk;
             pointer();
         };
         this.bit.onMouseOut = function(e3) {
@@ -121,17 +154,17 @@ window.onload = function() {
         };
         return this;
     }
-    pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy", "Just a city boy.\nBorn and raised in South Detroit.\nHe took the midnight train, goin' anywhere."));
-    pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star","Dancing with the stars"));
-    sto_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet","It's the same size as your mom. Bazinga!",20,200,"science",10));
-    pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart","It's telltale."));
-    pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera","In Soviet Russia, TV watch YOU!"));
-    pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins","(845)-803-6670"));
-    pos_chars.push(new Character("Graphics/doodler.png","Doodler","The character from the game that JUMPED the charts.",2));
-    pos_chars.push(new Character("Graphics/Octocat.png","Octocat","Commit the Kraken.",3));
-    pos_chars.push(new Character("Graphics/Crystal_128_penguin.png","Tux","Installing Gentoo can be a TUXing procedure.",4));
-    pos_chars.push(new Character("Graphics/zoidberg.png","Dr. Zoidberg","Looking for a character? Why not Zoidberg?(\\/)_(\u00B0,,,\u00B0)_(\\/)",4));
-    pos_chars.push(new Character("Graphics/sheldonCooper.png","Sheldor the Conqueror","[Sheldor is AFK]",5));
+    pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy", "Just a city boy.\nBorn and raised in South Detroit.\nHe took the midnight train, goin' anywhere.",null,null,"neutral"));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star","Dancing with the stars",null,null,"science"));
+    sto_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet","It's the same size as your mom. Bazinga!",20,200,"science",10,3));
+    pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart","It's telltale.",null,null,"magic"));
+    pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera","In Soviet Russia, TV watch YOU!",null,null,"science"));
+    pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins","(845)-803-6670",null,null,"brute"));
+    pos_chars.push(new Character("Graphics/doodler.png","Doodler","The character from the game that JUMPED the charts.",2,null,"magic"));
+    pos_chars.push(new Character("Graphics/Octocat.png","Octocat","Commit the Kraken.",3,null,"science"));
+    pos_chars.push(new Character("Graphics/Crystal_128_penguin.png","Tux","Installing Gentoo can be a TUXing procedure.",4,null,"science"));
+    pos_chars.push(new Character("Graphics/zoidberg.png","Dr. Zoidberg","Looking for a character? Why not Zoidberg?(\\/)_(\u00B0,,,\u00B0)_(\\/)",4,null,"brute"));
+    pos_chars.push(new Character("Graphics/sheldonCooper.png","Sheldor the Conqueror","[Sheldor is AFK]",5,null,"science"));
     
     pos_enems.push(new Character("Graphics/blackMage.png","Black Mage","Looks like the Jawas learned to use magic.",2,null,"magic"));
     pos_enems.push(new Character("Graphics/jawa.png","Jawa","OMG! It's a druuuuuuuuuuuuuuuurd!",2,null,"science"));
@@ -217,9 +250,12 @@ window.onload = function() {
             }
         }
         if(enems.length<=0 && enemsLoaded) {
-            money += 100;
-            titleScreen();
-            enemsLoaded = false;
+            setTimeout(function() {
+                money += 100;
+                stage.removeAllChildren();
+                titleScreen();
+                enemsLoaded = false;
+            },1000);
         }
         stage.update();
     };
@@ -254,14 +290,14 @@ window.onload = function() {
         var final = tempArr3[0];
         var finalP = final[2];
         var finalE = final[0];
-        if(finalE.x<finalP.x) {
+        if(finalE.x<finalP.x && finalE.x<canvas.width/size-1) {
             finalE.x += 1;
-        } else if(finalE.x>finalP.x) {
+        } else if(finalE.x>finalP.x && finalE.x>0) {
             finalE.x -= 1;
         }
-        if(finalE.y<finalP.y) {
+        if(finalE.y<finalP.y && finalE.y<canvas.height/size-1) {
             finalE.y += 1;
-        } else if(finalE.y>finalP.y) {
+        } else if(finalE.y>finalP.y && finalE.y>0) {
             finalE.y -= 1;
         }
         finalE.update();
@@ -425,7 +461,7 @@ window.onload = function() {
                     b.onMouseOver = function(e2) {
                         pointer();
                         //console.log(this);
-                        canvas.title = this.image.char.type+"\n"+this.image.char.description;
+                        canvas.title = symbObj[this.image.char.elem]+this.image.char.type+"\n"+this.image.char.description;
                     };
                     b.onMouseOut = function(e2) {
                         canvas.title = null;
@@ -551,7 +587,7 @@ window.onload = function() {
                     b.onMouseOver = function(e2) {
                         pointer();
                         //console.log(this);
-                        canvas.title = curSymb+this.image.char.cost+"\n"+this.image.char.type+"\n"+this.image.char.description;
+                        canvas.title = curSymb+this.image.char.cost+"\n"+symbObj[this.image.char.elem]+this.image.char.type+"\n"+this.image.char.description;
                     };
                     b.onMouseOut = function(e2) {
                         canvas.title = null;
