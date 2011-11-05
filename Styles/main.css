@@ -130,8 +130,8 @@ canvas.pointer {
 /* set up the three bar spinners */
 .spinner {
     display: inline-block;
-    width: 640px;
-    height: 480px;
+    width: 480px;
+    height: 640px;
     vertical-align: middle;
   /*position:relative;
   width:100px;

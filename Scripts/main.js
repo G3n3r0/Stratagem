@@ -2,6 +2,7 @@
 window.onload = function() {
     window.curSymb = "\u264b";
     window.money = 100;
+    window.enemsLoaded = false;
     function findIndex(arr,val) {
         for(var i in arr) {
             if(arr[i] == val) {
@@ -215,9 +216,10 @@ window.onload = function() {
                 }
             }
         }
-        if(enems.length<=0) {
+        if(enems.length<=0 && enemsLoaded) {
             money += 100;
             titleScreen();
+            enemsLoaded = false;
         }
         stage.update();
     };
@@ -232,6 +234,7 @@ window.onload = function() {
             var tempArr2 = [];
             for(var j=0;j<playerArr.length;j++) {
                 var player = playerArr[i];
+                console.log(enem, enem.x, enem.y);
                 tempArr2.push([enem,calcEuc(player.x,player.y,enem.x,enem.y),player]);
             }
             tempArr.push(tempArr2);
@@ -280,6 +283,7 @@ window.onload = function() {
             console.log(en.elem);
             enems.push(en);
         }
+        window.enemsLoaded = true;
         /*for(var j in enems) {
             tiles[j].isOccupied = enems[j];
         }*/
@@ -537,6 +541,9 @@ window.onload = function() {
                         //console.log(characters.length,canvas.width/size);
                         if(window.money>=t.char.cost) {
                             window.money-=t.char.cost;
+                            t.char.bought = true;
+                            b.mouseEnabled = false;
+                            b.alpha = 0.5;
                             pos_chars.push(t.char);
                             stage.update();
                         }
@@ -550,6 +557,10 @@ window.onload = function() {
                         canvas.title = null;
                         depointer();
                     };
+                    if(this.char.bought) {
+                        b.alpha = 0.5;
+                        b.mouseEnabled = false;
+                    }
                     //b.scaleX = b.scaleY = 1/(this.i+1);
                     stage.addChild(b);
                     //console.log(b);
@@ -564,7 +575,7 @@ window.onload = function() {
         g.beginFill("yellow");
         g.drawRoundRect(0,0,bW,bH,10,10);
         var bu = new Shape(g);
-        bu.x = canvas.width-bW;
+        bu.x = 0;
         bu.y = canvas.height-bH;
         //bu.alpha = 0.5;
         bu.onClick = function(e) {
