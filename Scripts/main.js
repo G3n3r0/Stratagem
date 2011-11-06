@@ -27,6 +27,8 @@ window.onload = function() {
         spinner.setAttribute("class",spinner.getAttribute("class")+"mediu");
         //spinner.addClass("mediu");
     }
+    document.onselectstart = function() {return false;}; // ie
+    document.onmousedown = function() {return false;}; // mozilla
     window.curSymb = "\u264b";
     window.symbObj = {
             science: "\u269b",
@@ -156,7 +158,6 @@ window.onload = function() {
     }
     pos_chars.push(new Character("Graphics/PlanetCute PNG/Character Boy Edited.png","Boy", "Just a city boy.\nBorn and raised in South Detroit.\nHe took the midnight train, goin' anywhere.",null,null,"neutral"));
     pos_chars.push(new Character("Graphics/SpaceCute PNG/star.png","Star","Dancing with the stars",null,null,"science"));
-    sto_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet","It's the same size as your mom. Bazinga!",20,200,"science",10,3));
     pos_chars.push(new Character("Graphics/SpaceCute PNG/healthheart.png","Heart","It's telltale.",null,null,"magic"));
     pos_chars.push(new Character("Graphics/sssoldierOnOwn2.png","Steven Barbera","In Soviet Russia, TV watch YOU!",null,null,"science"));
     pos_chars.push(new Character("Graphics/avatar-default.png","John Q Cummins","(845)-803-6670",null,null,"brute"));
@@ -170,6 +171,11 @@ window.onload = function() {
     pos_enems.push(new Character("Graphics/jawa.png","Jawa","OMG! It's a druuuuuuuuuuuuuuuurd!",2,null,"science"));
     pos_enems.push(new Character("Graphics/Inky.png","Inky","Pac-pac-pac-pac-pac-pac-pac-pac-weeoweeeooowee.",2,null,"brute"));
     pos_enems.push(new Character("Graphics/PlanetCute PNG/Character Horn Girl Edited.png","Girl","Just a small-town girl.\nLiving in a lonely world.\nShe took the midnight train, going anywhere.",2,null,"neutral"));
+    
+    sto_chars.push(new Character("Graphics/gilgamesh_3.png","Planet","We are the Mesopota-mi-ans.\nSargon, Hammurabi, Ashurbanipal and Gilgamesh.",3,15,"brute",50));
+    sto_chars.push(new Character("Graphics/SpaceCute PNG/planet_2.png","Planet","It's the same size as your mom. Bazinga!",20,200,"science",101));
+    sto_chars.push(new Character("Graphics/spinning_beach_ball_sharpened.gif","Steve Jobs","\"No, my life didn't flash before my eyes. Apple doesn't support Flash.\"",20,200,"science",100));
+    
     function Enemy(x,y,img,name) {
         this.x = x;
         this.y = y;
@@ -250,12 +256,12 @@ window.onload = function() {
             }
         }
         if(enems.length<=0 && enemsLoaded) {
-            setTimeout(function() {
-                money += 100;
-                stage.removeAllChildren();
-                titleScreen();
-                enemsLoaded = false;
-            },1000);
+            //setTimeout(function() {
+            money += 100;
+            stage.removeAllChildren();
+            titleScreen();
+            enemsLoaded = false;
+            //},1000);
         }
         stage.update();
     };
@@ -531,6 +537,12 @@ window.onload = function() {
         stage.addChild(bu2);
         stage.addChild(clT);
     }
+    function updateMoneyText(moneyObj) {
+        moneyObj.text = curSymb+money.toString();
+        monT.x = canvas.width-monT.getMeasuredWidth();
+        monT.y = monT.getMeasuredLineHeight();
+        stage.addChild(monT);
+    }
     function store() {
         document.getElementById("c").removeAttribute("class");
         document.getElementById("div1").style.display = "none";
@@ -577,6 +589,7 @@ window.onload = function() {
                         //console.log(characters.length,canvas.width/size);
                         if(window.money>=t.char.cost) {
                             window.money-=t.char.cost;
+                            updateMoneyText(monT);
                             t.char.bought = true;
                             b.mouseEnabled = false;
                             b.alpha = 0.5;
@@ -635,12 +648,17 @@ window.onload = function() {
         but.onMouseOut = bu.onMouseOut;
         but.mouseEnabled = false;
         
-        //var charsLefts = 128*(canvas.width/640);
+        var monTs = 24*(canvas.width/640);
         
         /*var charsLeft = canvas.width/size;
         var clT = new Text(charsLeft.toString(), charsLefts+"px Arial", "#FFF");
         clT.x = canvas.width/2-clT.getMeasuredWidth()/2;
         clT.y = canvas.height/2;*/
+        
+        window.monT = new Text(curSymb+money.toString(), monTs+"px Ubuntu","#FFF");
+        monT.x = canvas.width-monT.getMeasuredWidth();
+        monT.y = monT.getMeasuredLineHeight();
+        stage.addChild(monT);
         
         stage.addChild(bu);
         stage.addChild(but);
